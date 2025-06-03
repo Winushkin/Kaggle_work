@@ -41,18 +41,7 @@ def main():
         preds = tokenizer.batch_decode(preds, skip_special_tokens=True)
         labels = tokenizer.batch_decode(labels, skip_special_tokens=True)
         return rouge.compute(predictions=preds, references=labels)
-    # Функция для очистки текста;
-    # Работаем только с Кириллицей и знаками препинания;
-    def clean_text(text):
-        if not isinstance(text, str):
-            return ""
-        text = re.sub(r"[^а-яА-ЯёЁ .,!?]", "", text)  # Оставляем только Кириллицу
-        text = re.sub(r"\s+", " ", text).strip()  # Заменяем множественные пробелы на 1
-        return text
-
-    # Дополнительная фильтрация: наличие хотя бы одной русской буквы в тексте
-    def has_letters(text):
-        return bool(re.search(r"[а-яА-ЯёЁ]", text))
+   
 
     def tokenize_function(examples):
         return tokenizer(
@@ -106,12 +95,7 @@ def main():
     df = df[['title', 'text']]
     log("Из датасета удалена лишняя информация")
 
-    # Очистка текста
-    df['text'] = df['text'].apply(clean_text)
-    df['title'] = df['title'].apply(clean_text)
-
-    # Избавляемся от ненужной пунктуации
-    df = df[df['text'].apply(has_letters) & df['title'].apply(has_letters)]
+   
 
     #Избавляемся от хвостов "в номере от мая"/"видео доступно"
     df['title'] = df['title'].apply(remove_patterns)
