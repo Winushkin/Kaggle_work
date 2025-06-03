@@ -41,7 +41,7 @@ def main():
         preds = tokenizer.batch_decode(preds, skip_special_tokens=True)
         labels = tokenizer.batch_decode(labels, skip_special_tokens=True)
         return rouge.compute(predictions=preds, references=labels)
-   
+
 
     def tokenize_function(examples):
         return tokenizer(
@@ -95,7 +95,7 @@ def main():
     df = df[['title', 'text']]
     log("Из датасета удалена лишняя информация")
 
-   
+
 
     #Избавляемся от хвостов "в номере от мая"/"видео доступно"
     df['title'] = df['title'].apply(remove_patterns)
@@ -171,8 +171,7 @@ def main():
         lr_scheduler_type="cosine",
         weight_decay=0.01,
         report_to="none",
-        fp16=True,
-        load_best_model_at_end=True
+        fp16=True
     )
 
     trainer = Trainer(
