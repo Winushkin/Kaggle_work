@@ -17,24 +17,6 @@ def main():
     DS_AMOUNT = 150000  # кол-во данных для обучения
     OUTPUT_DIR = "./modelFolder"
 
-    
-    class ShowExamplesCallback(TrainerCallback):
-        def on_evaluate(self, args, state, control, **kwargs):
-            # Только на rank 0 (главный процесс)
-            if dist.is_initialized() and dist.get_rank() != 0:
-                return
-
-            print("\n📊 Примеры генерации на валидации:")
-            model.eval()
-            for i in range(3):
-                input_text = val_data['input'].iloc[i]
-                reference = val_data['target'].iloc[i]
-                news = input_text.replace("Текст новости: ", "").split(" [SEP]")[0]
-                generated = generate_title(news)
-                print(f"\n📰 Новости: {news[:250]}...")
-                print(f"✅ Оригинал: {reference}")
-                print(f"🤖 Модель:   {generated}")
-            print("-" * 80)
 
     # Логгер
     def log(msg):
@@ -188,7 +170,6 @@ def main():
         eval_dataset=val_dataset,
         data_collator=data_collator,
         # compute_metrics = compute_metrics,
-        callbacks = [ShowExamplesCallback()]
     )
 
     log("Тренер готов к работе")
