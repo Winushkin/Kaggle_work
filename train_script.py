@@ -4,7 +4,7 @@ import re
 from datetime import datetime
 from sklearn.model_selection import train_test_split
 from datasets import Dataset
-import evaluate
+# import evaluate
 from transformers import (GPT2Tokenizer, GPT2LMHeadModel, DataCollatorForLanguageModeling,
                           TrainingArguments, Trainer, TrainerCallback)
 import shutil
@@ -34,13 +34,13 @@ def main():
     def log(msg):
         print(f"{datetime.now()} : {msg}")
 
-    rouge = evaluate.load("rouge")
+    # rouge = evaluate.load("rouge")
 
-    def compute_metrics(eval_preds):
-        preds, labels = eval_preds
-        preds = tokenizer.batch_decode(preds, skip_special_tokens=True)
-        labels = tokenizer.batch_decode(labels, skip_special_tokens=True)
-        return rouge.compute(predictions=preds, references=labels)
+    # def compute_metrics(eval_preds):
+    #     preds, labels = eval_preds
+    #     preds = tokenizer.batch_decode(preds, skip_special_tokens=True)
+    #     labels = tokenizer.batch_decode(labels, skip_special_tokens=True)
+    #     return rouge.compute(predictions=preds, references=labels)
 
 
     def tokenize_function(examples):
@@ -181,7 +181,7 @@ def main():
         train_dataset=train_dataset,
         eval_dataset=val_dataset,
         data_collator=data_collator,
-        compute_metrics = compute_metrics,
+        # compute_metrics = compute_metrics,
         callbacks = [ShowExamplesCallback()]
     )
 
