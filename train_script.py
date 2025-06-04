@@ -8,7 +8,8 @@ from datasets import Dataset
 from transformers import (GPT2Tokenizer, GPT2LMHeadModel, DataCollatorForLanguageModeling,
                           TrainingArguments, Trainer, TrainerCallback)
 import shutil
-
+import os
+import torch.distributed as dist
 
 
 
@@ -16,8 +17,13 @@ def main():
     DS_AMOUNT = 150000  # кол-во данных для обучения
     OUTPUT_DIR = "./modelFolder"
 
+    
     class ShowExamplesCallback(TrainerCallback):
         def on_evaluate(self, args, state, control, **kwargs):
+            # Только на rank 0 (главный процесс)
+            if dist.is_initialized() and dist.get_rank() != 0:
+                return
+
             print("\n📊 Примеры генерации на валидации:")
             model.eval()
             for i in range(3):
