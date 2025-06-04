@@ -166,6 +166,7 @@ def main():
         num_train_epochs=12,
         per_device_train_batch_size=4,
         gradient_accumulation_steps=8,
+        per_device_eval_batch_size=2,
         learning_rate=5e-5,
         warmup_steps=500,
         lr_scheduler_type="cosine",
